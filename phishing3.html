@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>اكتشف التصيّد — تخطيط جانبي للتابلت</title>
+<style>
+/* استيراد الخط */
+@font-face {
+  font-family: 'SSTArabic';
+  src: url('SSTArabic-Medium.woff2') format('woff2'),
+       url('SSTArabic-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* ===== أساسيات وتخطيط عام للصفحة ===== */
+html, body { height: 100%; }
+body{
+  font-family: 'SSTArabic','Segoe UI',Tahoma,Arial,sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg,#112b7c,#1f4690);
+  color: #222;
+  /* تخطيط يضمن ظهور الفوتر دائمًا */
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* Header | Content | Footer */
+}
+
+/* ===== الهيدر (موحّد) ===== */
+.header{
+  background:#fff; border-bottom:1px solid #e6e6e6;
+  position: sticky; top:0; z-index:50; box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.header-inner{
+  max-width:1200px; margin:0 auto; padding:10px 16px;
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
+}
+.brand-left img, .brand-right img{
+  height:100px; width:auto; object-fit:contain; display:block;
+}
+.header-center{display:flex; justify-content:center}
+.header-center a{
+  color:#333; text-decoration:none; font-weight:700; padding:8px 12px; border-radius:8px;
+}
+.header-center a:hover{background:#f3f4f6}
+
+/* ===== منطقة المحتوى (الكويز) ===== */
+.quiz-wrap{
+  max-width:1200px;
+  margin:16px auto;
+  padding:0 12px;
+  width:100%;
+  height:100%; /* يتمدّد داخل صف المحتوى */
+}
+.card{
+  background:#fff; border-radius:14px; box-shadow:0 10px 28px rgba(0,0,0,.07);
+  height:100%; /* بدل calc(100vh - ...) */
+  overflow:hidden;
+  display:grid;
+  grid-template-columns: 1fr 1.1fr; /* يسار صورة / يمين سؤال */
+  gap:0;
+}
+
+/* عمود الصورة (يسار) */
+.img-pane{
+  background:#fafafa;
+  display:flex; align-items:center; justify-content:center;
+  padding:14px; border-inline-end:1px solid #eee;
+}
+.img-pane .question-img{
+  max-width:100%; max-height:100%;
+  object-fit:contain; border-radius:10px; border:1px solid #e9e9e9;
+}
+
+/* عمود السؤال (يمين) */
+.qa-pane{
+  display:flex; flex-direction:column; min-width:0;
+  padding:16px;
+}
+.title-row{display:flex; align-items:baseline; justify-content:space-between; gap:12px}
+.title-row h1{font-size:1.15rem; margin:0}
+.title-row .muted{color:#6b7280; font-size:.9rem}
+
+.progress{height:8px; background:#eee;border-radius:10px; overflow:hidden; margin:10px 0 12px;}
+.progress > span{display:block; height:100%; background:rgb(0,185,181); width:0; transition:width .3s;}
+
+.q-scroll{
+  overflow:auto; /* تمرير داخلي عند زيادة النص */
+  flex:1; padding-inline-end:2px;
+}
+.q-title{font-size:1.05rem; margin:6px 0 10px;}
+.choices{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.choice{padding:12px; border-radius:10px; background:#f7f7fb; border:1px solid #eee; cursor:pointer; text-align:center; user-select:none}
+.choice input{display:none;}
+.choice.correct{background:#e8f5e9; border-color:#c8e6c9;}
+.choice.wrong{background:#ffebee; border-color:#ffcdd2;}
+
+.feedback{margin-top:12px; padding:12px; border-radius:10px; display:none; border:1px solid #eee; background:#f9fafb;}
+.feedback.ok{background:#e8f5e9; color:#1b5e20; display:block;}
+.feedback.err{background:#fff8e1; color:#b28704; display:block;}
+
+/* أزرار أسفل العمود الأيمن */
+.actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+button{
+  font-family: 'SSTArabic';
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 1rem;
+}
+.btn-main{  background: var(--accent); color: #fff; } /* التالي / إنهاء */
+.btn-ghost{ background: #f1f1f1; color: #333; }      /* السابق */
+
+
+/* ===== الفوتر (موحّد) ===== */
+.footer{
+  color:rgba(255,255,255,.95);
+  text-align:center;
+  margin: 14px 0 18px;
+  font-size:15px;
+}
+
+/* ===== استجابة التابلت والجوال ===== */
+@media (max-width: 1024px){
+  .header-inner{padding:10px 12px}
+}
+@media (max-width: 760px){
+  .brand-left img, .brand-right img{height:48px}
+  .card{grid-template-columns: 1fr; height:100%;}
+  .img-pane{border-inline-end:none; border-bottom:1px solid #eee; max-height:45vh;}
+}
+</style>
+</head>
+<body>
+
+<!-- الهيدر -->
+<header class="header">
+  <div class="header-inner">
+    <div class="brand-left"><a href="index.html"><img src="اشكال الشعارات-07.png" alt="شعار يسار" /></a></div>
+    <div class="header-center"><a href="index.html">الصفحة الرئيسية</a></div>
+    <div class="brand-right"><a href="index.html"><img src="شعار سايبر ايبا-01.png" alt="شعار يمين" /></a></div>
+  </div>
+</header>
+
+<!-- المحتوى -->
+<div class="quiz-wrap">
+  <section class="card" id="quiz">
+    <!-- يسار: صورة -->
+    <div class="img-pane">
+      <img id="qimg" class="question-img" src="" alt="صورة السؤال" />
+    </div>
+
+    <!-- يمين: سؤال وخيارات -->
+    <div class="qa-pane">
+      <div class="title-row">
+        <h1>اكتشف التصيّد</h1>
+        <div id="counter" class="muted"></div>
+      </div>
+
+      <div class="progress"><span id="bar"></span></div>
+
+      <div class="q-scroll">
+        <div id="qtext" class="q-title"></div>
+        <div id="choices" class="choices"></div>
+        <div id="feedback" class="feedback" style="display:none"></div>
+      </div>
+
+      <div class="actions">
+      <button id="prevBtn" class="btn-ghost" disabled>السابق</button>
+      <button id="nextBtn" class="btn-main">التالي</button>
+      <button id="restartBtn" class="btn-ghost" style="display:none">إعادة المحاولة</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- الفوتر -->
+<footer class="footer">صُنع بوعي في سايبر آيبا</footer>
+
+<script>
+/* بيانات الأسئلة — تأكد من وجود صور: Picture1.jpg ... Picture8.jpg */
+const QUESTIONS = [
+  { img:'Picture1.jpg', answer:'phish',
+    explainIfWrong:'هذه رسالة احتيال بسبب رابط غريب وطلب بيانات حساسة.',
+    explainIfRight:'أحسنت — لاحظت الرابط الغريب وطلب البيانات.' },
+  { img:'Picture2.jpg', answer:'real',
+    explainIfWrong:'هذه رسالة حقيقية — مرسل موثوق وتوقيع رسمي دون طلبات حساسة.',
+    explainIfRight:'صحيح — المؤشرات توحي برسالة رسمية سليمة.' },
+  { img:'Picture3.jpg', answer:'phish',
+    explainIfWrong:'محاولة تصيّد باستخدام أسلوب الاستعجال ورابط غير مطابق للشركة.',
+    explainIfRight:'ممتاز — الإلحاح + رابط مشبوه = تصيّد.' },
+  { img:'Picture4.jpg', answer:'real',
+    explainIfWrong:'حقيقية — من نطاق معتمد وتفاصيل حساب صحيحة.',
+    explainIfRight:'صحيح — مصدر موثوق وتفاصيل دقيقة.' },
+  { img:'Picture5.jpg', answer:'phish',
+    explainIfWrong:'البنوك لا تطلب تحديث بطاقتك عبر رابط في رسالة عشوائية.',
+    explainIfRight:'تمام — طلب تحديث عبر رابط = احتيال شائع.' },
+  { img:'Picture6.jpg', answer:'real',
+    explainIfWrong:'شكل رسمي وروابط لموقع معروف — رسالة صحيحة.',
+    explainIfRight:'جيد — التنسيق والروابط مطابقة للمصدر.' },
+  { img:'Picture7.jpg', answer:'phish',
+    explainIfWrong:'واتساب من جهة مجهولة يطلب رمز تحقق — هذا احتيال.',
+    explainIfRight:'صحيح — لا تشارك رموز التحقق أبداً.' },
+  { img:'Picture8.jpg', answer:'real',
+    explainIfWrong:'مرسل معروف ومحتوى شخصي دون روابط — رسالة حقيقية.',
+    explainIfRight:'تمام — لا مؤشرات تصيّد هنا.' }
+];
+
+let current = 0, score = 0, answered = Array(QUESTIONS.length).fill(false);
+
+/* عناصر DOM */
+const qimg = document.getElementById('qimg');
+const qtext = document.getElementById('qtext');
+const choicesDiv = document.getElementById('choices');
+const feedback = document.getElementById('feedback');
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const restartBtn = document.getElementById('restartBtn');
+
+function render(){
+  const q = QUESTIONS[current];
+
+  // عداد وتقدّم
+  counter.textContent = `${current+1} / ${QUESTIONS.length}`;
+  bar.style.width = ((current)/QUESTIONS.length*100) + '%';
+
+  // الصورة (يسار)
+  qimg.src = q.img;
+  qimg.alt = `سؤال ${current+1}`;
+
+  // السؤال + الخيارات (يمين)
+  qtext.textContent = 'هل هذه الرسالة حقيقية أم تصيّد؟';
+  choicesDiv.innerHTML = `
+    <label class="choice" data-val="phish"><input type="radio" name="opt" value="phish"/> تصيّد واحتيال</label>
+    <label class="choice" data-val="real"><input type="radio" name="opt" value="real"/> رسالة حقيقية</label>
+  `;
+  feedback.style.display = 'none';
+  feedback.className = 'feedback';
+
+  // أزرار
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = !answered[current];
+  nextBtn.textContent = current === QUESTIONS.length - 1 ? 'إنهاء' : 'التالي';
+  restartBtn.style.display = 'none';
+
+  hookChoices();
+}
+
+function hookChoices(){
+  const choices = Array.from(document.querySelectorAll('.choice'));
+  choices.forEach(ch=>{
+    ch.addEventListener('click', ()=>{
+      if(answered[current]) return;
+      const val = ch.getAttribute('data-val');
+      const correct = QUESTIONS[current].answer;
+      choices.forEach(c=>c.classList.remove('correct','wrong'));
+
+      if(val === correct){
+        ch.classList.add('correct');
+        feedback.className = 'feedback ok';
+        feedback.innerHTML = `<strong>أحسنت!</strong> ${QUESTIONS[current].explainIfRight}`;
+        score++;
+      }else{
+        ch.classList.add('wrong');
+        const correctDom = choices.find(c=>c.getAttribute('data-val')===correct);
+        if(correctDom) correctDom.classList.add('correct');
+        feedback.className = 'feedback err';
+        feedback.innerHTML = `<strong>خطأ.</strong> ${QUESTIONS[current].explainIfWrong}`;
+      }
+
+      feedback.style.display = 'block';
+      answered[current] = true;
+      nextBtn.disabled = false;
+    });
+  });
+}
+
+/* تنقل */
+prevBtn.addEventListener('click', ()=>{ if(current>0){ current--; render(); } });
+nextBtn.addEventListener('click', ()=>{
+  if(current < QUESTIONS.length - 1){ current++; render(); }
+  else showResult();
+});
+restartBtn.addEventListener('click', ()=>{
+  current = 0; score = 0; answered = Array(QUESTIONS.length).fill(false);
+  render();
+});
+
+/* النتيجة النهائية */
+function showResult(){
+  bar.style.width = '100%';
+  qimg.src = '';
+  qimg.alt = 'انتهى الاختبار';
+  qtext.innerHTML = `
+    <div style="font-size:1.15rem;margin-bottom:8px">النتيجة النهائية</div>
+    <div>إجابات صحيحة: <strong>${score}</strong> من ${QUESTIONS.length}</div>
+    <div style="margin-top:8px"><strong>توصيات:</strong></div>
+    <ul style="text-align:right; line-height:1.7; margin-top:8px">
+      <li>تحقق من عنوان المرسل والرابط قبل النقر.</li>
+      <li>لا تشارك رموز التحقق أو كلمات المرور.</li>
+      <li>احذر من الإلحاح أو الجوائز المفاجئة.</li>
+    </ul>
+  `;
+  choicesDiv.innerHTML = '';
+  feedback.style.display = 'none';
+  prevBtn.disabled = true;
+  nextBtn.style.display = 'none';
+  restartBtn.style.display = 'inline-block';
+}
+
+/* بدء */
+render();
+</script>
+</body>
+</html>
