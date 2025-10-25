@@ -259,6 +259,42 @@ button{
 
   .actions{ justify-content:space-between; }
 }
+
+/* === Force single-column layout up to tablet (iPad) widths ===
+   makes iPad show image above question like mobile */
+@media (max-width: 1024px) {
+  .card{
+    grid-template-columns: 1fr !important; /* صورة فوق - سؤال تحت */
+    height: auto !important;
+  }
+
+  .img-pane{
+    border-inline-end: none !important;
+    border-bottom: 1px solid #eee !important;
+    padding: 18px !important;
+    max-height: 60vh;        /* limit vertical size on tablet */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .img-pane img{
+    width: 100% !important;
+    height: auto !important;
+    max-height: 55vh !important; /* so the image is large but not overflow */
+    object-fit: contain !important;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .qa-pane{
+    padding: 18px !important;
+  }
+
+  /* ensure buttons remain at bottom and visible */
+  .actions{ justify-content: space-between; gap:12px; }
+}
+
 </style>
 
 
