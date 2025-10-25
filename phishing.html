@@ -157,6 +157,58 @@ button{
   .brand-left img,.brand-right img{height:48px}
 }
 
+
+
+/* ==== تثبيت مساحة الـ feedback + تقليل الارتفاع على iPad ==== */
+
+/* اجبر الـ feedback أن يشغل مكانه دائمًا */
+.feedback{
+  display: block !important;      /* يتجاهل display:none من السكربت */
+  visibility: hidden !important;  /* مخفي بصريًا لكن محجوز مكانه */
+  height: 88px !important;        /* احجز ارتفاع ثابت (قل/كبّر حسب رغبتك) */
+  overflow: auto !important;      /* تمرير داخلي عند طول النص */
+  margin-top: 10px;
+  border: 1px solid #eee;
+  background: #f9fafb;
+  border-radius: 10px;
+}
+/* عند الظهور تبقى نفس المساحة لكن تُعرض */
+.feedback.ok,
+.feedback.err{
+  visibility: visible !important;
+}
+
+/* أفسح مجالاً أسفل الأسئلة كي لا تغطي الأزرار النص الأخير */
+.q-scroll{
+  padding-bottom: 14px !important;
+}
+
+/* الأزرار تبقى ظاهرة ومريحة فوق شريط iPad */
+.actions{
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom)) !important;
+  background: linear-gradient(to top, #fff 85%, rgba(255,255,255,0));
+  gap: 12px !important;
+}
+
+/* قلّل ارتفاع الصورة قليلًا لتنجلي المساحة ويظهر الفوتر */
+@media (max-width: 1180px){
+  .img-pane img{
+    max-height: 52vh !important;  /* كانت 60vh: قللناها لترك مساحة أسفل */
+  }
+  .container{ margin: 12px auto !important; }
+  .qa-pane{ padding: 16px !important; }
+}
+
+/* كذلك، خفّض شعارات الهيدر على التابلت لزيادة الحيّز */
+@media (max-width: 1180px){
+  .brand-left img, .brand-right img{ height: 72px !important; }
+}
+
+
+
 </style>
 
 
