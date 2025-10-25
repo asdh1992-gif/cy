@@ -8,6 +8,7 @@
 /* ---------------------------
    الخط (تأكد من وجود الملفات)
    --------------------------- */
+/* ====== الخط ====== */
 @font-face {
   font-family: 'SSTArabic';
   src: url('SSTArabic-Medium.woff2') format('woff2'),
@@ -17,282 +18,133 @@
   font-style: normal;
 }
 
-/* ---------------------------
-   متغيرات الألوان واساسيات
-   --------------------------- */
+/* ====== متغيرات وأساسيات ====== */
 :root{
-  --blue-1: #112b7c;
-  --blue-2: #1f4690;
-  --accent: rgb(0,185,181);
-  --ink: #222;
-  --muted: #6b7280;
-  --card: #ffffff;
-  --border: #e6e6e6;
-  --bg: #f8f8fb;
+  --blue-1:#112b7c;
+  --blue-2:#1f4690;
+  --accent:rgb(0,185,181);
+  --ink:#222;
+  --muted:#6b7280;
+  --card:#fff;
+  --border:#e6e6e6;
+  --bg:#f8f8fb;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
   font-family:'SSTArabic','Segoe UI',Tahoma,Arial,sans-serif;
-  background: linear-gradient(135deg,var(--blue-1),var(--blue-2));
   color:var(--ink);
+  background:linear-gradient(135deg,var(--blue-1),var(--blue-2));
   min-height:100vh;
   display:grid;
-  grid-template-rows:auto 1fr auto; /* header | content | footer */
+  grid-template-rows:auto 1fr auto; /* Header | Content | Footer */
 }
 
-/* ---------------------------
-   الهيدر (موحّد)
-   --------------------------- */
+/* ====== الهيدر (موحّد) ====== */
 .header{
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  position:sticky;
-  top:0;
-  z-index:50;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  background:#fff;border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)
 }
 .header-inner{
-  max-width:1200px;
-  margin:0 auto;
-  padding:10px 16px;
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;
-  gap:12px;
+  max-width:1200px;margin:0 auto;padding:10px 16px;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px
 }
-.brand-left img,.brand-right img{
-  height:100px;
-  width:auto;
-  object-fit:contain;
-  display:block;
-}
-.header-center{display:flex; justify-content:center}
-.header-center a{
-  color:#333; text-decoration:none; font-weight:700; padding:8px 12px; border-radius:8px;
-}
-.header-center a:hover{ background:#f3f4f6 }
+.brand-left img,.brand-right img{height:100px;width:auto;object-fit:contain;display:block}
+.header-center{display:flex;justify-content:center}
+.header-center a{color:#333;text-decoration:none;font-weight:700;padding:8px 12px;border-radius:8px}
+.header-center a:hover{background:#f3f4f6}
 
-/* ---------------------------
-   المحتوى — بطاقة الكويز (جانبي)
-   --------------------------- */
-.container{ max-width:1200px; margin:18px auto; padding:12px; width:100%; }
+/* ====== المحتوى ====== */
+.container{max-width:1200px;margin:18px auto;padding:12px;width:100%}
 
-/* ملء المساحة بين الهيدر والفوتر */
-body > main.container{
-  height:100%;
-  display:flex;
-  min-height:0; /* مهم لتجنّب تمدّد الأبناء */
-}
-
+/* البطاقة الجانبية */
 .card{
   background:var(--card);
   border-radius:12px;
   box-shadow:0 10px 28px rgba(0,0,0,.07);
   overflow:hidden;
-
-  /* ===== إصلاح رئيسي: امنع الانكماش/التمدد حسب المحتوى ===== */
   display:grid;
-  flex:1 1 0%;          /* يملأ صف الـ flex */
-  width:100%;           /* عرض ثابت يساوي عرض .container */
-  max-width:100%;       /* لا يتجاوز الحاوية */
-  grid-template-columns:480px 1fr; /* ثبات عرض عمود الصورة */
+  grid-template-columns:1fr 1.1fr; /* Desktop: صورة يسار + نص يمين */
   gap:0;
-  height:100%;
+  height:auto;            /* مهم: لا نجبرها على 100% */
   min-height:0;
-  margin:auto;
 }
 
 /* عمود الصورة */
 .img-pane{
   background:#fafafa;
-  display:flex; align-items:center; justify-content:center;
-  padding:14px; border-inline-end:1px solid #eee;
-  width:480px;         /* ثابت */
-  flex:0 0 480px;
+  display:flex;align-items:center;justify-content:center;
+  padding:14px;border-inline-end:1px solid #eee;
 }
 .img-pane img{
-  max-width:100%; max-height:100%;
-  object-fit:contain;
-  border-radius:8px; border:1px solid #e9e9e9;
-  height:auto;
+  max-width:100%;max-height:80vh; /* كبيرة وواضحة على الديسكتوب */
+  object-fit:contain;border-radius:8px;border:1px solid #e9e9e9;display:block
 }
 
-/* عمود السؤال — شبكة ثابتة تمنع الاهتزاز */
+/* عمود السؤال */
 .qa-pane{
-  display:grid;
-  grid-template-rows:
-    auto   /* title-row */
-    auto   /* progress */
-    1fr    /* q-scroll (يتمرّر) */
-    auto   /* feedback (ثابت الارتفاع) */
-    auto;  /* actions */
-  row-gap:10px;
-  padding:16px;
-  min-width:0;    /* يمنع تأثير المحتوى على العرض */
-  min-height:0;
-  width:100%;
-  max-width:100%;
-  overflow:hidden; /* يمنع أي تمدد لحظي من العناصر الداخلية */
+  display:flex;flex-direction:column;min-width:0;padding:16px;overflow:visible
 }
+.title-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.title-row h2{margin:0;font-size:1.15rem}
+.counter{color:var(--muted)}
+.progress{height:8px;background:#f1f5f9;border-radius:10px;overflow:hidden;margin:10px 0}
+.progress>span{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
 
-/* منع أي عنصر داخلي من توسيع العمود */
-.qa-pane *{
-  max-width:100%;
-  word-break:break-word;
-  overflow-wrap:break-word;
-}
-
-.title-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.title-row h2{ margin:0; font-size:1.15rem; }
-.counter{ color:var(--muted); }
-
-.progress{ height:8px; background:#f1f5f9; border-radius:10px; overflow:hidden; margin:10px 0; }
-.progress > span{ display:block; height:100%; background:var(--accent); width:0; transition:width .3s; }
-
-.q-scroll{
-  overflow:auto;       /* التمرير هنا فقط */
-  min-height:0;        /* لا يدفع بقية العناصر */
-  padding-right:8px;
-  padding-bottom:8px;  /* يمنع قص آخر سطر */
-}
-.q-title{ font-size:1.05rem; margin:6px 0; }
-.choices{
-  display:grid; grid-template-columns:1fr 1fr; gap:12px;
-  align-content:start;
-}
+/* المساحة القابلة للتمرير */
+.q-scroll{overflow:auto;flex:1;min-height:0;padding-right:8px}
+.q-title{font-size:1.05rem;margin:6px 0}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
 .choice{
-  padding:12px; border-radius:10px; background:#f7f7fb; border:1px solid #eee;
-  cursor:pointer; text-align:center; user-select:none;
-  display:flex; align-items:center; justify-content:center;
+  padding:12px;border-radius:10px;background:#f7f7fb;border:1px solid #eee;
+  cursor:pointer;text-align:center;user-select:none;display:flex;align-items:center;justify-content:center
 }
-.choice.correct{ background:#e8f5e9; border-color:#c8e6c9; }
-.choice.wrong{ background:#ffebee; border-color:#ffcdd2; }
+.choice.correct{background:#e8f5e9;border-color:#c8e6c9}
+.choice.wrong{background:#ffebee;border-color:#ffcdd2}
+.choice input{accent-color:var(--blue-2)}
 
-/* ضبط لون مؤشر الراديو / accent */
-.choice input{ accent-color: var(--blue-2); }
-
-/* ---------------------------
-   أزرار التنقل — مطابق لصفحة assessment
-   --------------------------- */
+/* شريط الأزرار (Sticky بأسفل العمود) */
 .actions{
-  display:flex;
-  gap:10px;
-  margin-top:14px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
+  position:sticky;bottom:0;z-index:10;
+  padding:12px 0 calc(12px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,#fff 85%,rgba(255,255,255,0));
+  display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap
 }
 button{
-  font-family: 'SSTArabic', Arial, sans-serif;
-  cursor:pointer;
-  border:none;
-  border-radius:10px;
-  padding:10px 18px;
-  font-size:1rem;
+  font-family:'SSTArabic',Arial,sans-serif;cursor:pointer;border:none;border-radius:10px;
+  padding:10px 18px;font-size:1rem
 }
-.btn-main{ background:var(--accent); color:#fff; }
-.btn-main:hover{ filter:brightness(.97); }
-.btn-ghost{ background:#f1f1f1; color:#333; }
-.btn-ghost:hover{ filter:brightness(.98); }
-.btn-main:disabled, .btn-ghost:disabled{ opacity:.6; cursor:not-allowed; }
+.btn-main{background:var(--accent);color:#fff}
+.btn-main:hover{filter:brightness(.97)}
+.btn-ghost{background:#f1f1f1;color:#333}
+.btn-ghost:hover{filter:brightness(.98)}
+.btn-main:disabled,.btn-ghost:disabled{opacity:.6;cursor:not-allowed}
 
-/* feedback — ارتفاع ثابت + ظهور/إخفاء بدون تغيير التخطيط */
-.feedback{
-  margin-top:12px; padding:12px; border-radius:10px;
-  border:1px solid transparent; background:#f9fafb;
-  display:block !important;   /* يتجاوز تبديل display من السكربت */
-  height:96px !important;     /* ثابت لمنع الاهتزاز */
-  overflow:auto !important;   /* تمرير داخلي عند الحاجة */
-  visibility:hidden !important; /* محجوز مكانه لكنه مخفي افتراضيًا */
-  width:100%; box-sizing:border-box; /* لا يزيد العرض */
-}
-.feedback.ok{
-  background:#e8f5e9; color:#1b5e20;
-  border-color:#eee;  visibility:visible !important;
-}
-.feedback.err{
-  background:#fff8e1; color:#b28704;
-  border-color:#eee;  visibility:visible !important;
-}
+/* التعليقات */
+.feedback{margin-top:12px;padding:12px;border-radius:10px;display:none;border:1px solid #eee;background:#f9fafb}
+.feedback.ok{display:block;background:#e8f5e9;color:#1b5e20}
+.feedback.err{display:block;background:#fff8e1;color:#b28704}
 
-/* نتيجة */
-.result-box{ margin-top:12px; padding:14px; border-radius:10px; border:1px solid #eee; background:#fff; }
-
-/* ---------------------------
-   الفوتر (ثابت أسفل) 
-   --------------------------- */
+/* ====== الفوتر ====== */
 .footer{
-  background:rgba(0,0,0,0.05);
-  text-align:center;
-  color:#fff;
-  font-size:1.5rem;
-  padding:10px 0;
-  width:100%;
-  margin-top:auto;
-  position:sticky;
-  bottom:0;
+  text-align:center;color:#fff;padding:12px 8px;background:rgba(0,0,0,.04)
 }
 
-/* ---------------------------
-   استجابة التابلت / الموبايل
-   --------------------------- */
-@media (max-width: 1024px){
-  .header-inner{ padding:10px 12px; }
-  .card{ height:100%; }
+/* ====== استجابة الأجهزة ====== */
+/* iPad/mobile: صورة فوق والسؤال تحت + الأزرار دائماً ظاهرة */
+@media (max-width:1180px){
+  .brand-left img,.brand-right img{height:72px}
+  .card{grid-template-columns:1fr !important;height:auto !important}
+  .img-pane{border-inline-end:none !important;border-bottom:1px solid #eee !important;padding:18px !important}
+  .img-pane img{max-height:60vh !important;width:100% !important;height:auto !important}
+  .qa-pane{padding:18px !important}
+  .actions{justify-content:space-between}
 }
 
+/* جوال صغير */
 @media (max-width:760px){
-  .brand-left img,.brand-right img{ height:48px; }
-
-  .card{
-    grid-template-columns:1fr;  /* عمود واحد */
-    height:auto;
-  }
-
-  .img-pane{
-    border-inline-end:none; border-bottom:1px solid #eee;
-    max-height:45vh;
-    width:auto;         /* إلغاء 480px في الجوال */
-    flex:0 0 auto;      /* إلغاء التثبيت في الجوال */
-  }
-
-  .actions{ justify-content:space-between; }
-}
-
-/* === Force single-column layout up to tablet (iPad) widths ===
-   makes iPad show image above question like mobile */
-@media (max-width: 840px) {
-  .card{
-    grid-template-columns: 1fr !important; /* صورة فوق - سؤال تحت */
-    height: auto !important;
-  }
-
-  .img-pane{
-    border-inline-end: none !important;
-    border-bottom: 1px solid #eee !important;
-    padding: 18px !important;
-    max-height: 60vh;        /* limit vertical size on tablet */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .img-pane img{
-    width: 100% !important;
-    height: auto !important;
-    max-height: 55vh !important; /* so the image is large but not overflow */
-    object-fit: contain !important;
-    display: block;
-    margin: 0 auto;
-  }
-
-  .qa-pane{
-    padding: 18px !important;
-  }
-
-  /* ensure buttons remain at bottom and visible */
-  .actions{ justify-content: space-between; gap:12px; }
+  .brand-left img,.brand-right img{height:48px}
 }
 
 </style>
