@@ -389,29 +389,11 @@ render();
 
 
 
-  (function () {
-    var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-    if (!standalone) return;
-
-    document.addEventListener('click', function (e) {
-      var a = e.target.closest && e.target.closest('a[href]');
-      if (!a) return;
-
-      var url = new URL(a.getAttribute('href'), location.href);
-      var sameOrigin = url.origin === location.origin;
-
-      // أي رابط داخلي افتحه داخل نفس النافذة
-      if (sameOrigin) {
-        e.preventDefault();
-        location.href = url.href;
-      }
-      // الروابط الخارجية خَلِّها تفتح Safari (سلوك متوقع)
-    }, true);
-  })();
 
 </script>
 </body>
 </html>
+
 
 
 
