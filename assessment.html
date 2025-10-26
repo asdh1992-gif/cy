@@ -2,10 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
   
-  <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="اسم صفحتك">
-<link rel="apple-touch-icon" href="icon.png">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="اسم صفحتك" />
+
+<!-- أيقونة (تأكد من المسار) -->
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
+<link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png" />
+
+<!-- افتح كل الروابط في نفس النافذة افتراضيًا -->
+<base target="_self" />
   
   
 <meta charset="utf-8" />
@@ -242,7 +251,7 @@ button{
 
 <!-- Landing -->
 <section class="landing" id="landing">
-  <h1>اختبر وعيك ٢ السيبراني بخطوات سريعة — بدون حفظ أو تتبع.</h1>
+  <h1>اختبر وعيك السيبراني بخطوات سريعة — بدون حفظ أو تتبع.</h1>
   <h1>لماذا تختبر وعيك؟</h1>
   <p class="lead">الاختبار يساعدك على معرفة نقاط القوة والضعف في ممارساتك الأمنية الشخصية، ويعطيك نصائح سريعة لتحسين الحماية.</p>
   <a href="#quiz" class="A-" id="startBtn">ابدأ الاختبار</a>
@@ -382,6 +391,29 @@ restart.addEventListener('click',()=>{
 });
 
 render();
+
+
+
+  (function () {
+    var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+    if (!standalone) return;
+
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+
+      var url = new URL(a.getAttribute('href'), location.href);
+      var sameOrigin = url.origin === location.origin;
+
+      // أي رابط داخلي افتحه داخل نفس النافذة
+      if (sameOrigin) {
+        e.preventDefault();
+        location.href = url.href;
+      }
+      // الروابط الخارجية خَلِّها تفتح Safari (سلوك متوقع)
+    }, true);
+  })();
+
 </script>
 </body>
 </html>
